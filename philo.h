@@ -3,7 +3,7 @@
 
 # define ERROR_CODE -2147483647
 
-#include <unistd.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
 
@@ -28,8 +28,8 @@ typedef struct s_philo
 	int	meals_counter;
 	int is_full;
 	long last_meal_time;	// time passed from last meal
-	t_fork	*left_fork;
-	t_fork	*right_fork;
+	t_fork	*first_fork;
+	t_fork	*second_fork;
 	pthread_t	thread_id;
 	t_table	*table;
 }	t_philo;
@@ -49,6 +49,7 @@ struct s_table {
 
 // Prototypes
 long error_exit(const char *error_msg);
+long	safe_mutex_handle(t_mtx *mutex, t_mtx_state mtx_state);
 long	parse_input(t_table *table, char **argv);
-
+long data_init(t_table *table);
 #endif
