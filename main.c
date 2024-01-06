@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 			return (1);
 		if (data_init(&table) == ERROR_CODE)
 			return (1);
-		printf ("%ld", table.time_to_die);
+		// print_philos(table.philos);
 	}
 
 	else

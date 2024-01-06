@@ -17,6 +17,12 @@ typedef enum mtx_state {
 	MTX_DESTROY,
 } t_mtx_state;
 
+typedef enum thread_state {
+	THREAD_CREATE,
+	THREAD_DETACH,
+	THREAD_JOIN,
+} t_thread_state;
+
 typedef struct s_fork {
 	t_mtx	fork;
 	int		fork_id;
@@ -52,4 +58,7 @@ long error_exit(const char *error_msg);
 long	safe_mutex_handle(t_mtx *mutex, t_mtx_state mtx_state);
 long	parse_input(t_table *table, char **argv);
 long data_init(t_table *table);
+
+// Test functions
+void print_philos(t_philo *philos);
 #endif
