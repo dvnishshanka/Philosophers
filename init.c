@@ -2,9 +2,16 @@
 
 static void assign_forks(t_philo *philo, t_fork *forks)
 {
-	
-	philo->first_fork = &forks[(philo->id) - 1];
-	philo->second_fork = &forks[ (philo->id) % (philo->table->nbr_philo)];
+	if ((philo->id) % 2 == 0)
+	{
+		philo->first_fork = &forks[(philo->id) - 1];
+		philo->second_fork = &forks[ (philo->id) % (philo->table->nbr_philo)];
+	}
+	else
+	{
+		philo->first_fork = &forks[ (philo->id) % (philo->table->nbr_philo)];
+		philo->second_fork = &forks[(philo->id) - 1];
+	}
 printf("hello assign_forks %d %d\n",  (philo->first_fork->fork_id),(philo->second_fork->fork_id));
 }
 
@@ -20,7 +27,6 @@ static long philo_init(t_table *table)
 		philos[i].id = i + 1;
 		philos[i].meals_counter = 0;
 		philos[i].is_full = 0;
-		// philos[i].thread_id = 0;
 		philos[i].table = table;
 		assign_forks(&philos[i], table->forks);
 	}
