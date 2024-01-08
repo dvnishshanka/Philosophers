@@ -55,6 +55,7 @@ struct s_table {
 
 // Prototypes
 long error_exit(const char *error_msg);
+void	free_all(t_table *table);
 long	safe_mutex_handle(t_mtx *mutex, t_mtx_state mtx_state);
 long	parse_input(t_table *table, char **argv);
 long data_init(t_table *table);
