@@ -41,10 +41,8 @@ long	safe_pthread_handle(pthread_t *thread,
 	else if (THREAD_JOIN == thread_state)
 		return (handle_pthread_errors(pthread_join(*thread, NULL)));
 	else
-		return (error_exit("Wrong pthread 
-	State.\n
-	Use 'THREAD_CREATE' 'THREAD_DETACH' 
-	'THREAD_JOIN'."));
+		return (error_exit
+			("Wrong pthread State.\nUse THREAD_CREATE/DETACH/JOIN."));
 }
 
 long	safe_mutex_handle(t_mtx *mutex, t_mtx_state mtx_state)
@@ -58,6 +56,6 @@ long	safe_mutex_handle(t_mtx *mutex, t_mtx_state mtx_state)
 	else if (MTX_DESTROY == mtx_state)
 		return (handle_mutex_errors(pthread_mutex_destroy(mutex)));
 	else
-		return (error_exit("Wrong Mutex State.\nUse 
-	'MTX_LOCK' 'MTX_UNLOCK' 'MTX_INIT' 'MTX_DESTROY'."));
+		return (error_exit
+			("Wrong Mutex State.\nUse MTX_LOCK/UNLOCK/INIT/DESTROY"));
 }
