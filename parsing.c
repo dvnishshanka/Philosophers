@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dnishsha <dnishsha@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/09 13:53:30 by dnishsha          #+#    #+#             */
+/*   Updated: 2024/01/09 13:53:37 by dnishsha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static int	is_space(const char c)
@@ -7,7 +19,7 @@ static int	is_space(const char c)
 	return (0);
 }
 
-static long ft_atoi(char *str)
+static long	ft_atoi(char *str)
 {
 	long	num;
 	int		sign;
@@ -31,7 +43,7 @@ static long ft_atoi(char *str)
 		if (((num * sign) > 2147483647) || ((num * sign) < -2147483648))
 			return (error_exit("Input value exceeds max/min number limits"));
 	}
-	return sign * num;
+	return (sign * num);
 }
 
 long	parse_input(t_table *table, char **argv)
@@ -40,12 +52,14 @@ long	parse_input(t_table *table, char **argv)
 	table->time_to_die = ft_atoi(argv[2]);
 	table->time_to_eat = ft_atoi(argv[3]);
 	table->time_to_sleep = ft_atoi(argv[4]);
-	if (table->nbr_philo == ERROR_CODE || table->time_to_die == ERROR_CODE || table->time_to_eat == ERROR_CODE || table->time_to_sleep == ERROR_CODE)
+	if (table->nbr_philo == ERROR_CODE || table->time_to_die == ERROR_CODE || 
+		table->time_to_eat == ERROR_CODE || table->time_to_sleep == ERROR_CODE)
 		return (ERROR_CODE);
 	if (table->nbr_philo < 1 || table->nbr_philo > 200)
 		return (error_exit("No of philosophers should be between 1 - 200."));
-	if (table->time_to_die < 60 || table->time_to_eat < 60 || table->time_to_sleep < 60)
-		return (error_exit("time_to_eat, time_to_die, time_to_sleep shall be greater than 60ms."));
+	if (table->time_to_die < 60 || table->time_to_eat < 60 || 
+		table->time_to_sleep < 60)
+		return (error_exit("time_to_eat/die/sleep shall be greater 60ms."));
 	if (argv[5])
 	{
 		table->nbr_limit_meals = ft_atoi(argv[5]);
@@ -54,7 +68,7 @@ long	parse_input(t_table *table, char **argv)
 	}
 	else
 		table->nbr_limit_meals = -1;
-	if (argv[5] && table->nbr_limit_meals < 1)
-		return (error_exit("number_of_times_each_philosopher_must_eat should be one or more."));
+	if (argv[5] && table->nbr_limit_meals < 0)
+		return (error_exit("each_philo_must_eat 0 or more times."));
 	return (0);
 }
