@@ -23,3 +23,12 @@ void	free_all(t_table *table)
 	free(table->forks);
 	free(table->philos);
 }
+
+long long	get_timestamp_in_ms(struct	timeval	*tv)
+{
+	long long timestamp;
+
+	gettimeofday(tv, NULL);
+	timestamp = (tv->tv_sec * 1000) + (tv->tv_usec / 1000);
+	return timestamp;
+}

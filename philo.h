@@ -17,7 +17,9 @@
 
 # include <stdlib.h>
 # include <stdio.h>
+# include <unistd.h>
 # include <pthread.h>
+# include <sys/time.h>
 
 typedef pthread_mutex_t	t_mtx;
 typedef struct s_table	t_table;
@@ -70,9 +72,13 @@ struct s_table {
 // Prototypes
 long	error_exit(const char *error_msg);
 void	free_all(t_table *table);
+long long	get_timestamp_in_ms(struct	timeval	*tv);
 long	safe_mutex_handle(t_mtx *mutex, t_mtx_state mtx_state);
+long	safe_pthread_handle(pthread_t *thread,
+	void *(*start_routine) (void *), void *arg, t_thread_state thread_state);
 long	parse_input(t_table *table, char **argv);
 long	data_init(t_table *table);
+int		dinner(t_table *table);
 
 // Test functions
 void	print_philos(t_philo *philos);
