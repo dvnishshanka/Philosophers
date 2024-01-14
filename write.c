@@ -12,15 +12,29 @@
 
 #include "philo.h"
 
-void	print_philos(t_philo *philos)
+// We will not write the status if stimulation has been ended
+void	write_state(t_philo_state state, t_table *table, t_philo *philo)
 {
-	int	i;
+	struct timeval	tv;
 
-	i = 0;
-	while (i < philos[0].table->nbr_philo)
+	if ((state == TOOK_FIRST_FORK || state == TOOK_SECOND_FORK) && simulation_finished(table) == 0)
 	{
-		printf("Philosopher %d:\n\tmeals_counter %d\n\tis_full %d\n\tlast_meal_time %ld\n\tfirst_fork id %d\n\tsecond_fork id %d\n\tthread_id %ld\n", i, philos[i].meals_counter,
-			philos[i].is_full, philos[i].last_meal_time, philos[i].first_fork->fork_id, philos[i].second_fork->fork_id, philos[i].thread_id);
-		i ++;
+		printf("%ld %d has taken a fork\n", get_timestamp_in_ms(&tv), philo->id);
+	}
+	else if (state == THINK)
+	{
+		printf("%ld %d is thinking\n", get_timestamp_in_ms(&tv), philo->id);
+	}
+	else if (state == EAT)
+	{
+		printf("%ld %d is eating\n", get_timestamp_in_ms(&tv), philo->id);
+	}
+	else if (state == SLEEP)
+	{
+		printf("%ld %d is sleeping\n", get_timestamp_in_ms(&tv), philo->id);
+	}
+	else if (state == DIED)
+	{
+		printf("%ld %d died\n", get_timestamp_in_ms(&tv), philo->id);
 	}
 }

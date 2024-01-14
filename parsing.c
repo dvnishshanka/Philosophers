@@ -52,6 +52,7 @@ long	parse_input(t_table *table, char **argv)
 	table->time_to_die = ft_atoi(argv[2]);
 	table->time_to_eat = ft_atoi(argv[3]);
 	table->time_to_sleep = ft_atoi(argv[4]);
+	table->all_threads_ready = 0;
 	if (table->nbr_philo == ERROR_CODE || table->time_to_die == ERROR_CODE || 
 		table->time_to_eat == ERROR_CODE || table->time_to_sleep == ERROR_CODE)
 		return (ERROR_CODE);

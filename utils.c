@@ -24,11 +24,18 @@ void	free_all(t_table *table)
 	free(table->philos);
 }
 
-long long	get_timestamp_in_ms(struct	timeval	*tv)
+long	get_timestamp_in_ms(struct	timeval	*tv)
 {
-	long long timestamp;
+	long timestamp;
 
 	gettimeofday(tv, NULL);
 	timestamp = (tv->tv_sec * 1000) + (tv->tv_usec / 1000);
 	return timestamp;
+}
+
+// Wait till all philosopher threads are ready
+// get_init is used to avoid data races.
+void	wait_till_threads_ready(t_table	*table)
+{
+	while (get_int(&table->mtx_table, &table->all_threads_ready) == 0);
 }

@@ -4,7 +4,7 @@ NAME = philo
 RM = rm -f
 INCLUDE = -I include
 
-SRCS = main.c utils.c parsing.c init.c safe_functions.c dinner.c test.c
+SRCS = main.c utils.c parsing.c init.c safe_functions.c dinner.c getters_setters.c write.c
 OBJS = $(SRCS:.c=.o)
 
 # Compile source files into into object files

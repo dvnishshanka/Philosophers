@@ -59,6 +59,7 @@ long	data_init(t_table *table)
 		free(table->forks);
 		return (error_exit("Malloc Failed"));
 	}
+	safe_mutex_handle(&table->mtx_table, MTX_INIT);
 	while (++i < table->nbr_philo)
 	{
 		if (safe_mutex_handle(&table->forks[i].fork, MTX_INIT) == ERROR_CODE)

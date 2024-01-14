@@ -26,7 +26,6 @@ int	main(int argc, char **argv)
 			return (1);
 		if (dinner(&table) == ERROR_CODE)
 			return (1);
-		print_philos(table.philos);
 		free_all(&table);
 	}
 	else

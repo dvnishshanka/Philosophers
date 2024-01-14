@@ -37,6 +37,15 @@ typedef enum thread_state {
 	THREAD_JOIN,
 }	t_thread_state;
 
+typedef enum philo_state {
+	TOOK_FIRST_FORK,
+	TOOK_SECOND_FORK,
+	THINK,
+	EAT,
+	SLEEP,
+	DIED,
+}	t_philo_state;
+
 typedef struct s_fork {
 	t_mtx	fork;
 	int		fork_id;
@@ -53,6 +62,7 @@ typedef struct s_philo
 	t_fork		*second_fork;
 	pthread_t	thread_id;
 	t_table		*table;
+	t_mtx		mtx_philo;
 }	t_philo;
 
 // t_fork	*forks -> array of forks
@@ -65,21 +75,35 @@ struct s_table {
 	int		nbr_limit_meals;
 	long	start_simulation;
 	int		is_end_simulation;
+	int		all_threads_ready;
+	t_mtx	mtx_table;
 	t_fork	*forks;
 	t_philo	*philos;
 } ;
 
 // Prototypes
+// util functions
 long	error_exit(const char *error_msg);
 void	free_all(t_table *table);
-long long	get_timestamp_in_ms(struct	timeval	*tv);
+void	wait_till_threads_ready(t_table	*table);
+long	get_timestamp_in_ms(struct	timeval	*tv);
+
+// safe functions
 long	safe_mutex_handle(t_mtx *mutex, t_mtx_state mtx_state);
 long	safe_pthread_handle(pthread_t *thread,
 	void *(*start_routine) (void *), void *arg, t_thread_state thread_state);
+
 long	parse_input(t_table *table, char **argv);
 long	data_init(t_table *table);
 int		dinner(t_table *table);
 
-// Test functions
-void	print_philos(t_philo *philos);
+//getters and seters
+void    set_int(t_mtx *mutex, int *dest, int val);
+int		get_int(t_mtx *mutex, int *val);
+void    set_long(t_mtx *mutex, long *dest, int val);
+long    get_long(t_mtx *mutex, long *val);
+int 	simulation_finished(t_table *table);
+
+// Write functions
+void	write_state(t_philo_state state, t_table *table, t_philo *philo);
 #endif
