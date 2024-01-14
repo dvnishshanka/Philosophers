@@ -39,6 +39,7 @@ static long	philo_init(t_table *table)
 		philos[i].meals_counter = 0;
 		philos[i].is_full = 0;
 		philos[i].table = table;
+		safe_mutex_handle(&philos[i].mtx_philo, MTX_INIT);
 		assign_forks(&philos[i], table->forks);
 	}
 	return (0);
@@ -60,11 +61,12 @@ long	data_init(t_table *table)
 		return (error_exit("Malloc Failed"));
 	}
 	safe_mutex_handle(&table->mtx_table, MTX_INIT);
+	safe_mutex_handle(&table->mtx_write, MTX_INIT);
 	while (++i < table->nbr_philo)
 	{
 		if (safe_mutex_handle(&table->forks[i].fork, MTX_INIT) == ERROR_CODE)
 		{
-			free_all(table);
+			free_philos_tables(table);
 			return (ERROR_CODE);
 		}
 		table->forks[i].fork_id = i;

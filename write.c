@@ -15,26 +15,33 @@
 // We will not write the status if stimulation has been ended
 void	write_state(t_philo_state state, t_table *table, t_philo *philo)
 {
-	struct timeval	tv;
+	long	time_elapsed;
 
+	time_elapsed = get_timestamp_in_ms() - table->start_simulation;
+	if (get_int(&philo->mtx_philo, &philo->is_full) == 1)
+		return ;
+	safe_mutex_handle(&table->mtx_write, MTX_LOCK);
+	safe_mutex_handle(&philo->mtx_philo, MTX_LOCK);
 	if ((state == TOOK_FIRST_FORK || state == TOOK_SECOND_FORK) && simulation_finished(table) == 0)
 	{
-		printf("%ld %d has taken a fork\n", get_timestamp_in_ms(&tv), philo->id);
+		printf("%-8ld %d has taken a fork\n", time_elapsed, philo->id);
 	}
-	else if (state == THINK)
+	else if (state == THINK && simulation_finished(table) == 0)
 	{
-		printf("%ld %d is thinking\n", get_timestamp_in_ms(&tv), philo->id);
+		printf("%-8ld %d is thinking\n", time_elapsed, philo->id);
 	}
-	else if (state == EAT)
+	else if (state == EAT && simulation_finished(table) == 0)
 	{
-		printf("%ld %d is eating\n", get_timestamp_in_ms(&tv), philo->id);
+		printf(COLOR_BLUE"%-8ld %d is eating\n"COLOR_RESET, time_elapsed, philo->id);
 	}
-	else if (state == SLEEP)
+	else if (state == SLEEP && simulation_finished(table) == 0)
 	{
-		printf("%ld %d is sleeping\n", get_timestamp_in_ms(&tv), philo->id);
+		printf("%-8ld %d is sleeping\n", time_elapsed, philo->id);
 	}
-	else if (state == DIED)
+	else if (state == DIED && simulation_finished(table) == 0)
 	{
-		printf("%ld %d died\n", get_timestamp_in_ms(&tv), philo->id);
+		printf(COLOR_RED"%-8ld %d died\n"COLOR_RESET, time_elapsed, philo->id);
 	}
+	safe_mutex_handle(&table->mtx_write, MTX_UNLOCK);
+	safe_mutex_handle(&philo->mtx_philo, MTX_UNLOCK);
 }

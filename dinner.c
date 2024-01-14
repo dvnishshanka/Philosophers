@@ -14,16 +14,16 @@ static	void monitor_end_simulation(t_philo *philo)
 	}
 }
 
-static void	eat(t_philo *philo, struct	timeval *tv)
+static void	eat(t_philo *philo)
 {
 	safe_mutex_handle(&philo->first_fork->fork, MTX_LOCK);
 	write_state(TOOK_FIRST_FORK, philo->table, philo);
 	safe_mutex_handle(&philo->second_fork->fork, MTX_LOCK);
 	write_state(TOOK_SECOND_FORK, philo->table, philo);
+	philo->last_meal_time = get_timestamp_in_ms();
 	write_state(EAT, philo->table, philo);
-	philo->last_meal_time = get_timestamp_in_ms(tv);
 	usleep((philo->table->time_to_eat) * 1000);
-	philo->last_meal_time = get_timestamp_in_ms(tv);
+	philo->last_meal_time = get_timestamp_in_ms();
 	philo->meals_counter ++;
 	if (philo->table->nbr_limit_meals == philo->meals_counter)
 		set_int(&philo->table->mtx_table, &philo->is_full, 1);
@@ -38,14 +38,13 @@ static void	eat(t_philo *philo, struct	timeval *tv)
 static void	*dinner_simulation(void *arg)
 {
 	t_philo	*philo;
-	struct	timeval	tv;
 
 	philo = (t_philo *)arg;
 	wait_till_threads_ready(philo->table);
-	set_long(&philo->mtx_philo, &philo->last_meal_time, get_timestamp_in_ms(&tv));
+	set_long(&philo->mtx_philo, &philo->last_meal_time, get_timestamp_in_ms());
 	while (simulation_finished(philo->table) == 0 && philo->is_full == 0)
 	{
-		eat(philo, &tv);
+		eat(philo);
 		write_state(SLEEP, philo->table, philo);
 		usleep((philo->table->time_to_sleep) * 1000);
 		write_state(THINK, philo->table, philo);

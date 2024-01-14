@@ -18,19 +18,34 @@ long	error_exit(const char *error_msg)
 	return (ERROR_CODE);
 }
 
-void	free_all(t_table *table)
+void	free_philos_tables(t_table *table)
 {
 	free(table->forks);
 	free(table->philos);
 }
 
-long	get_timestamp_in_ms(struct	timeval	*tv)
+void	clean_all(t_table *table)
 {
-	long timestamp;
+	int	i;
 
-	gettimeofday(tv, NULL);
-	timestamp = (tv->tv_sec * 1000) + (tv->tv_usec / 1000);
-	return timestamp;
+	i = -1;
+	while (++i <table->nbr_philo)
+	{
+		safe_mutex_handle(&table->forks[i].fork, MTX_DESTROY);
+		safe_mutex_handle(&table->philos[i].mtx_philo, MTX_DESTROY);
+	}
+	safe_mutex_handle(&table->mtx_table, MTX_DESTROY);
+	free_philos_tables(table);
+}
+
+long	get_timestamp_in_ms(void)
+{
+	long 	timestamp;
+	struct	timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	timestamp = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+	return (timestamp);
 }
 
 // Wait till all philosopher threads are ready
