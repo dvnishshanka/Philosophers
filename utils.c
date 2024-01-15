@@ -38,13 +38,16 @@ void	clean_all(t_table *table)
 	free_philos_tables(table);
 }
 
-long	get_timestamp_in_ms(void)
+long	get_timestamp(t_time_state t_state)
 {
 	long 	timestamp;
 	struct	timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	timestamp = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+	if (t_state == MILLISEC)
+		timestamp = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+	else if (t_state == MICROSEC)
+		timestamp = (tv.tv_sec * 1e6) + (tv.tv_usec);
 	return (timestamp);
 }
 

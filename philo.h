@@ -14,6 +14,7 @@
 # define PHILO_H
 
 # define ERROR_CODE -2147483647
+# define DEBUG_MODE 1
 # define COLOR_BLUE "\033[0;34m"
 # define COLOR_RED "\x1b[34m"
 # define COLOR_RESET "\x1b[0m"
@@ -49,12 +50,18 @@ typedef enum philo_state {
 	DIED,
 }	t_philo_state;
 
+typedef enum time_state {
+	MILLISEC,
+	MICROSEC,
+}	t_time_state;
+
 typedef struct s_fork {
 	t_mtx	fork;
 	int		fork_id;
 }	t_fork;
 
 // long		last_meal_time -> time passed from last meal
+// mtx_philo -> This is useful for races with thread monitor
 typedef struct s_philo
 {
 	int			id;
@@ -80,9 +87,10 @@ struct s_table {
 	int		is_end_simulation;
 	int		all_threads_ready;
 	t_mtx	mtx_table;
-	t_mtx	mtx_write;
+	t_mtx	mtx_write; // Is this required
 	t_fork	*forks;
 	t_philo	*philos;
+	pthread_t	monitor;
 } ;
 
 // Prototypes
@@ -91,7 +99,8 @@ long	error_exit(const char *error_msg);
 void	clean_all(t_table *table);
 void	free_philos_tables(t_table *table);
 void	wait_till_threads_ready(t_table	*table);
-long	get_timestamp_in_ms();
+long	get_timestamp(t_time_state t_state);
+void    sleep_with_interruption(long sleep_time, t_table *table);
 
 // safe functions
 long	safe_mutex_handle(t_mtx *mutex, t_mtx_state mtx_state);
@@ -111,4 +120,7 @@ int 	simulation_finished(t_table *table);
 
 // Write functions
 void	write_state(t_philo_state state, t_table *table, t_philo *philo);
+
+// Monitor Function
+void    *monitor_philos(void *arg);
 #endif
