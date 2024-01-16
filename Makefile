@@ -1,5 +1,5 @@
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=thread
 NAME = philo
 RM = rm -f
 INCLUDE = -I include
@@ -14,7 +14,7 @@ OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) $(INCLUDE) -o $(NAME)
+	$(CC) $(OBJS) $(INCLUDE) -o $(NAME) -ltsan
 
 clean:
 	$(RM) $(OBJS)

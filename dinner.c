@@ -2,7 +2,18 @@
 
 static void	think(t_philo *philo)
 {
+	long	time_to_die;
+	long	time_to_eat;
+	long	time_to_sleep;
+
 	write_state(THINK, philo->table, philo);
+	time_to_die = get_long(&philo->table->mtx_table, &philo->table->time_to_die);
+	time_to_eat = get_long(&philo->table->mtx_table, &philo->table->time_to_eat);
+	time_to_sleep = get_long(&philo->table->mtx_table, &philo->table->time_to_sleep);
+	if (get_int(&philo->table->mtx_table, &philo->table->nbr_philo) % 2 == 1 && (time_to_die - (time_to_eat + time_to_sleep) > 30))
+	{	
+		sleep_with_interruption(time_to_die - (time_to_eat + time_to_sleep) - 30, philo->table);
+	}
 }
 
 static void	eat(t_philo *philo)
@@ -27,14 +38,32 @@ static void	*dinner_simulation(void *arg)
 
 	philo = (t_philo *)arg;
 	wait_till_threads_ready(philo->table);
-	set_long(&philo->mtx_philo, &philo->last_meal_time, get_timestamp(MILLISEC));
-	while (simulation_finished(philo->table) == 0 && philo->is_full == 0)
+	set_long(&philo->mtx_philo, &philo->last_meal_time, philo->table->start_simulation);
+	while (simulation_finished(philo->table) == 0 && get_int(&philo->mtx_philo, &philo->is_full) == 0)
 	{
 		eat(philo);
 		write_state(SLEEP, philo->table, philo);
 		sleep_with_interruption(philo->table->time_to_sleep, philo->table);
 		think(philo);
 	}
+	return (NULL);
+}
+
+// Dinner simulation for single person
+static void	*dinner_alone(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	wait_till_threads_ready(philo->table);
+	set_long(&philo->mtx_philo, &philo->last_meal_time, get_timestamp(MILLISEC));
+	safe_mutex_handle(&philo->first_fork->fork, MTX_LOCK);
+	write_state(TOOK_FIRST_FORK, philo->table, philo);
+	while (simulation_finished(philo->table) == 0)
+	{
+		usleep(500);
+	}
+	safe_mutex_handle(&philo->first_fork->fork, MTX_UNLOCK);
 	return (NULL);
 }
 
@@ -51,8 +80,7 @@ int	dinner(t_table *table)
 
 	i = -1;
 	if (table->nbr_philo == 1)
-	{}
-	// TODO
+		safe_pthread_handle(&(table->philos[0].thread_id), dinner_alone, (void *)&table->philos[0], THREAD_CREATE);
 	else
 	{
 		while (++i < table->nbr_philo)
@@ -71,5 +99,6 @@ int	dinner(t_table *table)
 			return (ERROR_CODE);
 	}
 	set_int(&table->mtx_table, &table->is_end_simulation, 1);
+	safe_pthread_handle(&(table->monitor), NULL, NULL, THREAD_JOIN);
 	return (0);
 }

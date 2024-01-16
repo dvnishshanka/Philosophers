@@ -14,7 +14,7 @@
 # define PHILO_H
 
 # define ERROR_CODE -2147483647
-# define DEBUG_MODE 1
+# define DEBUG_MODE 0
 
 # define COLOR_BLUE "\033[0;34m"
 # define COLOR_RED "\033[0;31m"
