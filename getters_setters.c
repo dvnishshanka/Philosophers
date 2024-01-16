@@ -19,7 +19,7 @@ int    get_int(t_mtx *mutex, int *val)
 }
 
 // get and set long
-void    set_long(t_mtx *mutex, long *dest, int val)
+void    set_long(t_mtx *mutex, long *dest, long val)
 {
     safe_mutex_handle(mutex, MTX_LOCK);
     *dest = val;

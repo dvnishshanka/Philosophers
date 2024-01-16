@@ -15,8 +15,9 @@
 
 # define ERROR_CODE -2147483647
 # define DEBUG_MODE 1
+
 # define COLOR_BLUE "\033[0;34m"
-# define COLOR_RED "\x1b[34m"
+# define COLOR_RED "\033[0;31m"
 # define COLOR_RESET "\x1b[0m"
 
 # include <stdlib.h>
@@ -114,7 +115,7 @@ int		dinner(t_table *table);
 //getters and seters
 void    set_int(t_mtx *mutex, int *dest, int val);
 int		get_int(t_mtx *mutex, int *val);
-void    set_long(t_mtx *mutex, long *dest, int val);
+void    set_long(t_mtx *mutex, long *dest, long val);
 long    get_long(t_mtx *mutex, long *val);
 int 	simulation_finished(t_table *table);
 

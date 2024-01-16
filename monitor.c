@@ -7,7 +7,6 @@ static int has_phil_died(t_philo *philo)
     if (get_int(&philo->mtx_philo, &philo->is_full) == 1)
         return (0);
     time_elapsed = get_timestamp(MILLISEC) - get_long(&philo->mtx_philo, &philo->last_meal_time);
-    printf("Time laspsed %ld %ld %ld\n", get_timestamp(MILLISEC), philo->last_meal_time, philo->table->time_to_die);
     if (time_elapsed > get_long(&philo->table->mtx_table, &philo->table->time_to_die))
         return (1);
     return (0);
@@ -33,6 +32,7 @@ void    *monitor_philos(void *arg)
                 break;
             }
         }
+        usleep(1000);
     }
     return (NULL);
 }

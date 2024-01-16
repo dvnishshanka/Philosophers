@@ -28,7 +28,6 @@ static void	*dinner_simulation(void *arg)
 	philo = (t_philo *)arg;
 	wait_till_threads_ready(philo->table);
 	set_long(&philo->mtx_philo, &philo->last_meal_time, get_timestamp(MILLISEC));
-	printf("Time lasdinnpsed %ld %ld \n", get_timestamp(MILLISEC), (philo->last_meal_time));
 	while (simulation_finished(philo->table) == 0 && philo->is_full == 0)
 	{
 		eat(philo);
