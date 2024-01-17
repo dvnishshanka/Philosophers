@@ -38,7 +38,6 @@ void	write_state(t_philo_state state, t_table *table, t_philo *philo)
 	if (get_int(&philo->mtx_philo, &philo->is_full) == 1)
 		return ;
 	safe_mutex_handle(&table->mtx_write, MTX_LOCK);
-	// safe_mutex_handle(&philo->mtx_philo, MTX_LOCK);
 	if (DEBUG_MODE == 1)
 		write_state_debug(state, table, philo, time_elapsed);
 	else
@@ -55,5 +54,4 @@ void	write_state(t_philo_state state, t_table *table, t_philo *philo)
 			printf(COLOR_RED"%-8ld %d died\n"COLOR_RESET, time_elapsed, philo->id);
 	}
 	safe_mutex_handle(&table->mtx_write, MTX_UNLOCK);
-	// safe_mutex_handle(&philo->mtx_philo, MTX_UNLOCK);
 }
