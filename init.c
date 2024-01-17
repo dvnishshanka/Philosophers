@@ -45,11 +45,25 @@ static long	philo_init(t_table *table)
 	return (0);
 }
 
-long	data_init(t_table *table)
+static int	fork_mtx_init(t_table *table)
 {
 	int	i;
 
 	i = -1;
+	while (++i < table->nbr_philo)
+	{
+		if (safe_mutex_handle(&table->forks[i].fork, MTX_INIT) == ERROR_CODE)
+		{
+			free_philos_tables(table);
+			return (ERROR_CODE);
+		}
+		table->forks[i].fork_id = i;
+	}
+	return (0);
+}
+
+long	data_init(t_table *table)
+{
 	table->is_end_simulation = 0;
 	table->forks = (t_fork *)malloc(sizeof (t_fork) * table->nbr_philo);
 	if (!table->forks)
@@ -62,15 +76,8 @@ long	data_init(t_table *table)
 	}
 	safe_mutex_handle(&table->mtx_table, MTX_INIT);
 	safe_mutex_handle(&table->mtx_write, MTX_INIT);
-	while (++i < table->nbr_philo)
-	{
-		if (safe_mutex_handle(&table->forks[i].fork, MTX_INIT) == ERROR_CODE)
-		{
-			free_philos_tables(table);
-			return (ERROR_CODE);
-		}
-		table->forks[i].fork_id = i;
-	}
+	if (fork_mtx_init(table) == ERROR_CODE)
+		return (ERROR_CODE);
 	philo_init(table);
 	return (0);
 }

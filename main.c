@@ -33,8 +33,9 @@ int	main(int argc, char **argv)
 		error_exit
 		("Wrong input.\n"
 			"Correct format: number_of_philosophers time_to_die" 
-			"time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]");
+			"time_to_eat time_to_sleep "
+			" [number_of_times_each_philosopher_must_eat]");
 		return (1);
 	}
-return (0);
+	return (0);
 }

@@ -59,3 +59,18 @@ long	safe_mutex_handle(t_mtx *mutex, t_mtx_state mtx_state)
 		return (error_exit
 			("Wrong Mutex State.\nUse MTX_LOCK/UNLOCK/INIT/DESTROY"));
 }
+
+int	create_phil_thread(t_table *table)
+{
+	int	i;
+
+	i = -1;
+	while (++i < table->nbr_philo)
+	{
+		if (safe_pthread_handle(&(table->philos[i].thread_id),
+				dinner_simulation,
+				(void *)&table->philos[i], THREAD_CREATE) == ERROR_CODE)
+			return (ERROR_CODE);
+	}
+	return (0);
+}

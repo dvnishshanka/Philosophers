@@ -60,7 +60,8 @@ long	parse_input(t_table *table, char **argv)
 		return (error_exit("No of philosophers should be between 1 - 200."));
 	if (table->time_to_die < 60 || table->time_to_eat < 60 || 
 		table->time_to_sleep < 60)
-		return (error_exit("time_to_eat/die/sleep shall not be less than 60ms."));
+		return (error_exit("time_to_eat/die/sleep shall "
+				"not be less than 60ms."));
 	if (argv[5])
 	{
 		table->nbr_limit_meals = ft_atoi(argv[5]);
