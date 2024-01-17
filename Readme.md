@@ -23,11 +23,12 @@ During that time, they will need to hold two forks.
   - **number_of_times_each_philosopher_must_eat (optional argument):** If all
 
 philosophers have eaten at least number_of_times_each_philosopher_must_eat times, the simulation stops. If not specified, the simulation stops when a philosopher dies.
-*
     
 **Resources**
 
 - https://www.youtube.com/watch?v=GXXE42bkqQk
+- https://www.youtube.com/watch?v=zOpzGHwJ3MU
+- https://nafuka11.github.io/philosophers-visualizer/
   
 **Result: :one::zero::zero: / :one::zero::zero: :heavy_check_mark:**
 
