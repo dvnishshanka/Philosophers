@@ -1,6 +1,9 @@
 # Philosophers
 
-push_swap which calculates and displays the instructions, that sorts the integers received as arguments.
+
+The Philosophers problem is a classic synchronization and concurrency problem.
+
+The problem involves a scenario where a group of philosophers sits around a dining table with a bowl of spaghetti in front of each. The philosophers alternate between thinking and eating. To eat, a philosopher must pick up the two adjacent forks. The challenge is to design a solution that prevents deadlock (where no philosopher can proceed) and ensures that each philosopher gets a fair chance to eat without creating contention for resources. 
 
 **Languages**
 
